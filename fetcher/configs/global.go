@@ -10,6 +10,7 @@ import (
 type Config struct {
 	Env                   string `env:"ENV" env-default:"development"`
 	RedisEventFetcherName string `env:"ENV" env-default:"fetch_events"`
+	RedisNewEventName     string `env:"ENV" env-default:"new_event"`
 }
 
 var config *Config

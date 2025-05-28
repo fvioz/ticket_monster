@@ -2,6 +2,7 @@ package domain
 
 import (
 	"encoding/json"
+	"fetcher/configs"
 	"fetcher/libs"
 
 	"github.com/gocraft/work"
@@ -18,6 +19,8 @@ func NewRepository() *Repository {
 }
 
 func (r *Repository) SaveEvent(event BasePlan) (*work.Job, error) {
+	globalConfig := configs.GlobalConfigInstance()
+
 	logger := libs.LoggerInstance()
 	redis := libs.RedisInstance()
 
@@ -29,7 +32,7 @@ func (r *Repository) SaveEvent(event BasePlan) (*work.Job, error) {
 
 	enqueuer := work.NewEnqueuer(redis.Config().ApplicationNamespace, redis.Pool())
 
-	job, err := enqueuer.Enqueue("new_event", work.Q{"json_event": jsonData})
+	job, err := enqueuer.Enqueue(globalConfig.RedisNewEventName, work.Q{"json_event": jsonData})
 	if err != nil {
 		logger.Error("Failed to enqueue the event", err)
 	}
