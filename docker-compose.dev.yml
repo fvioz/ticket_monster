@@ -1,0 +1,30 @@
+---
+services:
+  # Fetcher service
+  fetcher:
+    image: golang:1.24-alpine
+    container_name: fetcher
+    networks:
+      - my-network
+    working_dir: /app
+    volumes:
+      - ./fetcher:/app
+    command: ["go", "run", "main.go"]
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+
+  # Redis Service
+  redis:
+    image: redis:8.0.1-alpine
+    container_name: redis
+    networks:
+      - my-network
+    restart: always
+    ports:
+      - "6379:6379"
+
+networks:
+  my-network:
+    driver: bridge
