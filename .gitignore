@@ -1,0 +1,32 @@
+# Common files that should be ignored in all projects
+
+# Logs
+*.log
+# Temporary files
+*.tmp
+*~
+
+*.bak
+# Environment files (containing secrets, API keys, credentials)
+.env
+*.env
+.env.*
+
+# Local configuration that shouldn't be shared
+*.local
+
+### Go ###
+# go specific files
+
+*.exe
+*.test
+vendor/
+*.out
+go.work
+
+go.sum
+
+### Macos ###
+# macOS operating system specific files
+
+.DS_Store
