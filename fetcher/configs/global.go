@@ -8,7 +8,8 @@ import (
 )
 
 type Config struct {
-	Env string `env:"ENV" env-default:"development"`
+	Env                   string `env:"ENV" env-default:"development"`
+	RedisEventFetcherName string `env:"ENV" env-default:"fetch_events"`
 }
 
 var config *Config
