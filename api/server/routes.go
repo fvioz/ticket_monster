@@ -6,12 +6,20 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/go-playground/validator/v10"
+
 	_ "api/docs"
 
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"go.uber.org/zap"
+)
+
+type (
+	CustomValidator struct {
+		validator *validator.Validate
+	}
 )
 
 //	@title			Events API
@@ -23,6 +31,8 @@ import (
 func (s *Server) routes() {
 	logger := libs.LoggerInstance()
 	planHandler := handlers.NewPlansHandler()
+
+	s.echo.Validator = &CustomValidator{validator: validator.New()}
 
 	// @Summary Events Plans
 	// @Description get plans within a time range
@@ -37,13 +47,12 @@ func (s *Server) routes() {
 	// @Router /v1/events/plans [get]
 	s.echo.GET("v1/events/plans", func(c echo.Context) error {
 		type Params struct {
-			StartAt time.Time `param:"starts_at" validate:"required,time"`
-			EndAt   time.Time `param:"end_at" validate:"required,time"`
+			StartAt time.Time `params:"starts_at" json:"starts_at" validate:"required,datetime"`
+			EndAt   time.Time `params:"end_at" json:"end_at" validate:"required,datetime"`
 		}
 
-		var params Params
-
-		if err := ValidateRequest(c, &params); err != nil {
+		params := new(Params)
+		if err := c.Validate(params); err != nil {
 			return err
 		}
 
