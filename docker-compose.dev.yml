@@ -15,6 +15,23 @@ services:
     networks:
       - back-end
 
+  # Processors service
+  processors:
+    image: golang:1.24-alpine
+    container_name: processors
+    working_dir: /app
+    command: ["go", "run", "main.go"]
+    environment:
+      - DB_HOST=db
+      - REDIS_HOST=redis
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./processors:/app
+    networks:
+      - back-end
+
   # Database Service
   db:
     image: postgres:17-alpine
@@ -22,9 +39,11 @@ services:
     restart: always
     ports:
       - "5434:5432"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./create-db.sql:/docker-entrypoint-initdb.d/db/schema.sql
+      - ./db/:/docker-entrypoint-initdb.d
     networks:
       - back-end
 
