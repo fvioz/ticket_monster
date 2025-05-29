@@ -10,7 +10,7 @@ type Plan struct {
 	PlanEndDate   time.Time `xml:"plan_end_date"`
 	SellTo        time.Time `xml:"sell_to"`
 	SoldOut       bool      `xml:"sold_out"`
-	BasePlan      *BasePlan `pg:"rel:has-one"`
+	BasePlan      *BasePlan `pg:"rel:belongs-to"`
 	Zones         []*Zone   `pg:"rel:has-many" xml:"zones"`
 }
 
