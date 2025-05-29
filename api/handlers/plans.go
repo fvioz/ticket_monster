@@ -21,7 +21,7 @@ func (p *PlanHandler) GetPlansV1(starts_at time.Time, ends_at time.Time) ([]mode
 		Relation("BasePlan").
 		Relation("Zones").
 		Where(
-			"base_plan.sell_mode >= ? AND plan.plan_start_date >= ? AND plan.plan_end_date <= ?",
+			"base_plan.sell_mode = ? AND plan.plan_start_date >= ? AND plan.plan_end_date <= ?",
 			"online",
 			starts_at,
 			ends_at,
