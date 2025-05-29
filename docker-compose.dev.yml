@@ -1,5 +1,25 @@
 ---
 services:
+  api:
+    image: golang:1.24-alpine
+    container_name: api
+    working_dir: /app
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    command: ["go", "run", "main.go"]
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
+    volumes:
+      - ./api:/app
+    networks:
+      - front-end
+      - back-end
+
   # Fetcher service
   fetcher:
     image: golang:1.24-alpine
@@ -59,6 +79,7 @@ services:
 
 networks:
   front-end:
+    driver: bridge
   back-end:
 
 volumes:
