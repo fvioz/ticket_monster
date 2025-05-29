@@ -35,11 +35,32 @@ func (r *Repository) SaveEvent(basePlan BasePlan) error {
 		}
 		defer tx.Close()
 
-		_, err = db.Model(basePlan).Insert()
+		_, err = db.Model(&basePlan).Insert()
 		if err != nil {
 			_ = tx.Rollback()
-			logger.Error("Failed to insert base plan, plans and zones", zap.Error(err))
+			logger.Error("Failed to insert base plan", zap.Error(err))
 			return err
+		}
+
+		for _, plan := range basePlan.Plans {
+			_, err = db.Model(plan).Insert()
+			if err != nil {
+				_ = tx.Rollback()
+				logger.Error("Failed to insert plan", zap.Error(err))
+			}
+
+			for _, zone := range plan.Zones {
+				_, err = db.Model(zone).Insert()
+				if err != nil {
+					_ = tx.Rollback()
+					logger.Error("Failed to insert zone", zap.Error(err))
+					return err
+				}
+			}
+		}
+
+		if err := tx.Commit(); err != nil {
+			logger.Error("Failed to insert the event", zap.Error(err))
 		}
 	}
 
