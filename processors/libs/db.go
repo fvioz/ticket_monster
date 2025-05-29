@@ -25,8 +25,6 @@ func DBInstance() *pg.DB {
 
 		dbInstance.AddQueryHook(pgotel.NewTracingHook())
 
-		defer dbInstance.Close()
-
 		db = dbInstance
 	})
 

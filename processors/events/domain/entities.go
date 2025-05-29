@@ -8,7 +8,7 @@ type BasePlan struct {
 	ID       int64
 	SellMode string
 	Title    string
-	Plans    []*Plan `pg:"rel:has-many,join_fk:base_plan_id"`
+	Plans    []*Plan `pg:"rel:has-many"`
 }
 
 type Plan struct {
@@ -17,8 +17,7 @@ type Plan struct {
 	PlanEndDate   time.Time
 	SellTo        time.Time
 	SoldOut       bool
-	BasePlan      *BasePlan `pg:"rel:has-one"`
-	Zones         []*Zone   `pg:"rel:has-many"`
+	Zones         []*Zone `pg:"rel:has-many"`
 }
 
 type Zone struct {
