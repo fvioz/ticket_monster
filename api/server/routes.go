@@ -47,8 +47,8 @@ func (s *Server) routes() {
 	// @Router /v1/events/plans [get]
 	s.echo.GET("v1/events/plans", func(c echo.Context) error {
 		type Params struct {
-			StartAt time.Time `params:"starts_at" json:"starts_at" validate:"required,datetime"`
-			EndAt   time.Time `params:"end_at" json:"end_at" validate:"required,datetime"`
+			start_at time.Time `params:"starts_at" validate:"required,datetime"`
+			end_at   time.Time `params:"end_at" validate:"required,datetime"`
 		}
 
 		params := new(Params)
@@ -56,7 +56,7 @@ func (s *Server) routes() {
 			return err
 		}
 
-		plans, err := planHandler.GetPlansV1(params.StartAt, params.EndAt)
+		plans, err := planHandler.GetPlansV1(params.start_at, params.end_at)
 		if err != nil {
 			logger.Error("Failed to fetch plans", zap.Error(err))
 
