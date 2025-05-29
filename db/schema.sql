@@ -1,7 +1,7 @@
 CREATE DATABASE events;
 
 CREATE TABLE base_plans (
-  id serial PRIMARY KEY,
+  id INT PRIMARY KEY,
   sell_mode VARCHAR (50),
   title text
 );
@@ -9,7 +9,7 @@ CREATE TABLE base_plans (
 CREATE INDEX index_base_plans_sell_mode ON base_plans(sell_mode);
 
 CREATE TABLE plans (
-  id serial PRIMARY KEY,
+  id INT PRIMARY KEY,
   base_plan_id INT NOT NULL,
   plan_start_date TIMESTAMP,
   plan_end_date TIMESTAMP,
@@ -20,7 +20,7 @@ CREATE TABLE plans (
 CREATE INDEX index_plans_dates ON plans(plan_start_date, plan_end_date);
 
 CREATE TABLE zones (
-  id serial PRIMARY KEY,
+  id INT PRIMARY KEY,
   plan_id INT NOT NULL,
   capacity INT NOT NULL,
   price FLOAT,
