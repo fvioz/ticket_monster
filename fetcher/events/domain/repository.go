@@ -32,7 +32,7 @@ func (r *Repository) SaveEvent(event BasePlan) (*work.Job, error) {
 
 	enqueuer := work.NewEnqueuer(redis.Config().ApplicationNamespace, redis.Pool())
 
-	job, err := enqueuer.Enqueue(globalConfig.RedisNewEventName, work.Q{"json_event": jsonData})
+	job, err := enqueuer.Enqueue(globalConfig.RedisNewEventName, work.Q{"json_event": string(jsonData)})
 	if err != nil {
 		logger.Error("Failed to enqueue the event", err)
 	}
