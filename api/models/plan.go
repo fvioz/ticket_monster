@@ -10,8 +10,7 @@ type Plan struct {
 	PlanEndDate   time.Time `xml:"plan_end_date"`
 	SellTo        time.Time `xml:"sell_to"`
 	SoldOut       bool      `xml:"sold_out"`
+	BasePlanID    int64
 	BasePlan      *BasePlan `pg:"rel:belongs-to"`
 	Zones         []*Zone   `pg:"rel:has-many" xml:"zones"`
 }
-
-// join_fk:plan_id

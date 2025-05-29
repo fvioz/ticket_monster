@@ -6,5 +6,6 @@ type Zone struct {
 	Price    float64 `xml:"price"`
 	Name     string  `xml:"name"`
 	Numbered bool    `xml:"numbered"`
-	Plan     *Plan   `pg:"rel:belongs-to"`
+	PlanID   int64
+	Plan     *Plan `pg:"rel:belongs-to"`
 }

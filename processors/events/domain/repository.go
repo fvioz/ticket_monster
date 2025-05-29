@@ -25,37 +25,45 @@ func (r *Repository) SaveEvent(basePlan BasePlan) error {
 		zap.String("title", basePlan.Title),
 	)
 
-	bp := &BasePlan{ID: basePlan.ID}
-	err := db.Model(bp).WherePK().Select()
+	tx, err := db.Begin()
 	if err != nil {
-		tx, err := db.Begin()
-		if err != nil {
-			logger.Error("Failed to begin transaction", zap.Error(err))
-			return err
-		}
-		defer tx.Close()
+		logger.Error("Failed to begin transaction", zap.Error(err))
+		return err
+	}
+	defer tx.Close()
 
-		_, err = db.Model(&basePlan).Insert()
+	_, err = tx.Model(&basePlan).
+		Where("id = ?id").
+		OnConflict("DO NOTHING").
+		SelectOrInsert()
+	if err != nil {
+		_ = tx.Rollback()
+		logger.Error("Failed to insert base plan", zap.Error(err))
+		return err
+	}
+
+	for _, plan := range basePlan.Plans {
+		plan.BasePlanID = basePlan.ID
+		_, err = tx.Model(plan).
+			Where("id = ?id").
+			OnConflict("DO NOTHING").
+			SelectOrInsert()
 		if err != nil {
 			_ = tx.Rollback()
-			logger.Error("Failed to insert base plan", zap.Error(err))
+			logger.Error("Failed to insert plan", zap.Error(err))
 			return err
 		}
 
-		for _, plan := range basePlan.Plans {
-			_, err = db.Model(plan).Insert()
+		for _, zone := range plan.Zones {
+			zone.PlanID = plan.ID
+			_, err = tx.Model(zone).
+				Where("id = ?id").
+				OnConflict("DO NOTHING").
+				SelectOrInsert()
 			if err != nil {
 				_ = tx.Rollback()
-				logger.Error("Failed to insert plan", zap.Error(err))
-			}
-
-			for _, zone := range plan.Zones {
-				_, err = db.Model(zone).Insert()
-				if err != nil {
-					_ = tx.Rollback()
-					logger.Error("Failed to insert zone", zap.Error(err))
-					return err
-				}
+				logger.Error("Failed to insert zone", zap.Error(err))
+				return err
 			}
 		}
 

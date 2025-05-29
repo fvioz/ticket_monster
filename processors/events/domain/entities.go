@@ -17,6 +17,7 @@ type Plan struct {
 	PlanEndDate   time.Time
 	SellTo        time.Time
 	SoldOut       bool
+	BasePlanID    int64
 	BasePlan      *BasePlan `pg:"rel:belongs-to"`
 	Zones         []*Zone   `pg:"rel:has-many"`
 }
@@ -27,5 +28,6 @@ type Zone struct {
 	Price    float64
 	Name     string
 	Numbered bool
+	PlanID   int64
 	Plan     *Plan `pg:"rel:belongs-to"`
 }
