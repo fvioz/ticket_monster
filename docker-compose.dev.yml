@@ -24,6 +24,7 @@ services:
       - "5434:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./create-db.sql:/docker-entrypoint-initdb.d/db/schema.sql
     networks:
       - back-end
 
