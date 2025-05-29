@@ -21,12 +21,6 @@ This solution provides a robust system to fetch, process, and serve plans from a
 3. Build the application: `make build`
 4. Run the solution: `make run`
 
-For development:
-
-```bash
-make dev
-```
-
 ## Architecture
 
 This solution is designed to scale horizontally as demand increases:
@@ -120,10 +114,10 @@ The solution incorporates:
 - Prometheus for metrics collection
 - Distributed tracing
 - Structured logging with Zap
-- Health check endpoints
 
 ### Future Enhancements
 
+- Health check endpoints
 - Implement a cache warming strategy
 - Add data validation and schema versioning
 - Implement advanced retry strategies with exponential backoff
@@ -157,4 +151,3 @@ Event Processor
 
 - Worker Scaling: Adjust worker count based on queue size
 - Prioritization: Process high-value events first
-- Idempotency: Ensure operations can be safely retried
