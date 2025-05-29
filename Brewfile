@@ -1,4 +1,5 @@
 brew 'graphviz'
+brew 'go'
 brew 'pipenv'
 brew 'pre-commit'
 brew 'podman'
