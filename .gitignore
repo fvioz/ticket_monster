@@ -20,6 +20,7 @@
 
 *.exe
 *.test
+bin/
 vendor/
 *.out
 go.work
