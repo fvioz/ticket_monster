@@ -1,7 +1,9 @@
 ---
 services:
   api:
-    image: golang:1.24-alpine
+    build:
+      context: api
+      dockerfile: ../Dockerfile.go.dev
     container_name: api
     working_dir: /app
     expose:
@@ -22,7 +24,9 @@ services:
 
   # Fetcher service
   fetcher:
-    image: golang:1.24-alpine
+    build:
+      context: fetcher
+      dockerfile: ../Dockerfile.go.dev
     container_name: fetcher
     working_dir: /app
     command: ["go", "run", "main.go"]
@@ -37,7 +41,9 @@ services:
 
   # Processors service
   processors:
-    image: golang:1.24-alpine
+    build:
+      context: processors
+      dockerfile: ../Dockerfile.go.dev
     container_name: processors
     working_dir: /app
     command: ["go", "run", "main.go"]
@@ -63,7 +69,7 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./db/:/docker-entrypoint-initdb.d
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/events.sql
     networks:
       - back-end
 
