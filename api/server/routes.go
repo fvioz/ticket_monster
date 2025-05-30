@@ -40,13 +40,13 @@ func (s *Server) routes() {
 		startsAt, err := s.ParseTime(c.QueryParam("starts_at"))
 		if err != nil {
 			logger.Error("Failed to parse start time", zap.Error(err))
-			return echo.NewHTTPError(http.StatusBadRequest, "Invalid start time format, start_time parameter is required")
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid starts_at format, starts_at parameter is required")
 		}
 
 		endsAt, err := s.ParseTime(c.QueryParam("ends_at"))
 		if err != nil {
 			logger.Error("Failed to parse end time", zap.Error(err))
-			return echo.NewHTTPError(http.StatusBadRequest, "Invalid end time format, end_time parameter is required")
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid ends_at format, ends_at parameter is required")
 		}
 
 		plans, err := planHandler.GetPlansV1(startsAt, endsAt)
