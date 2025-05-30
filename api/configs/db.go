@@ -12,7 +12,7 @@ type DbConfig struct {
 	Port     string `env:"DB_PORT" env-default:"5432"`
 	Username string `env:"DB_USERNAME" env-default:"postgres"`
 	Password string `env:"DB_PASSWORD" env-default:""`
-	Database string `env:"DB_NANME" env-default:""`
+	Database string `env:"DB_NAME" env-default:"events"`
 	PoolSize int    `env:"DB_POOL_SIZE" env-default:"10"`
 }
 
