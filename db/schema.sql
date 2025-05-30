@@ -1,5 +1,7 @@
 CREATE DATABASE events;
 
+\c events
+
 CREATE TABLE base_plans (
   id INT PRIMARY KEY,
   sell_mode VARCHAR (50),
@@ -22,7 +24,7 @@ CREATE INDEX index_plans_dates ON plans(plan_start_date, plan_end_date);
 CREATE TABLE zones (
   id INT PRIMARY KEY,
   plan_id INT NOT NULL,
-  capacity INT NOT NULL,
+  capacity INT,
   price FLOAT,
   name TEXT,
   sell_to TIMESTAMP,
