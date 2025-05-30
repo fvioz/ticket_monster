@@ -14,7 +14,185 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/v1/events/plans": {
+            "get": {
+                "description": "get plans within a time range",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Plans"
+                ],
+                "summary": "Events Plans",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start time in format 2006-01-02T15:04:05",
+                        "name": "starts_at",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End time in format 2006-01-02T15:04:05",
+                        "name": "ends_at",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.Plans"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/echo.HTTPError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "echo.HTTPError": {
+            "type": "object",
+            "properties": {
+                "message": {}
+            }
+        },
+        "handlers.Plans": {
+            "type": "object",
+            "properties": {
+                "plans": {
+                    "type": "array",
+                    "title": "plans",
+                    "items": {
+                        "$ref": "#/definitions/models.Plan"
+                    }
+                }
+            }
+        },
+        "models.BasePlan": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "title": "id"
+                },
+                "plans": {
+                    "type": "array",
+                    "title": "plans",
+                    "items": {
+                        "$ref": "#/definitions/models.Plan"
+                    }
+                },
+                "sell_mode": {
+                    "type": "string",
+                    "title": "sell_mode"
+                },
+                "title": {
+                    "type": "string",
+                    "title": "title"
+                }
+            }
+        },
+        "models.Plan": {
+            "type": "object",
+            "properties": {
+                "basePlanID": {
+                    "type": "integer"
+                },
+                "base_plan": {
+                    "title": "base_plan",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.BasePlan"
+                        }
+                    ]
+                },
+                "id": {
+                    "type": "integer",
+                    "title": "id"
+                },
+                "plan_end_date": {
+                    "type": "string",
+                    "title": "plan_end_date"
+                },
+                "plan_start_date": {
+                    "type": "string",
+                    "title": "plan_start_date"
+                },
+                "sell_to": {
+                    "type": "string",
+                    "title": "sell_to"
+                },
+                "sold_out": {
+                    "type": "boolean",
+                    "title": "sold_out"
+                },
+                "zones": {
+                    "type": "array",
+                    "title": "zones",
+                    "items": {
+                        "$ref": "#/definitions/models.Zone"
+                    }
+                }
+            }
+        },
+        "models.Zone": {
+            "type": "object",
+            "properties": {
+                "capacity": {
+                    "type": "integer",
+                    "title": "capacity"
+                },
+                "id": {
+                    "type": "integer",
+                    "title": "id"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "name"
+                },
+                "numbered": {
+                    "type": "boolean",
+                    "title": "numbered"
+                },
+                "plan": {
+                    "title": "plan",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.Plan"
+                        }
+                    ]
+                },
+                "planID": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number",
+                    "title": "price"
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it

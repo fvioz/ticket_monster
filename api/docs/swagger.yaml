@@ -1,4 +1,123 @@
+definitions:
+  echo.HTTPError:
+    properties:
+      message: {}
+    type: object
+  handlers.Plans:
+    properties:
+      plans:
+        items:
+          $ref: '#/definitions/models.Plan'
+        title: plans
+        type: array
+    type: object
+  models.BasePlan:
+    properties:
+      id:
+        title: id
+        type: integer
+      plans:
+        items:
+          $ref: '#/definitions/models.Plan'
+        title: plans
+        type: array
+      sell_mode:
+        title: sell_mode
+        type: string
+      title:
+        title: title
+        type: string
+    type: object
+  models.Plan:
+    properties:
+      base_plan:
+        allOf:
+        - $ref: '#/definitions/models.BasePlan'
+        title: base_plan
+      basePlanID:
+        type: integer
+      id:
+        title: id
+        type: integer
+      plan_end_date:
+        title: plan_end_date
+        type: string
+      plan_start_date:
+        title: plan_start_date
+        type: string
+      sell_to:
+        title: sell_to
+        type: string
+      sold_out:
+        title: sold_out
+        type: boolean
+      zones:
+        items:
+          $ref: '#/definitions/models.Zone'
+        title: zones
+        type: array
+    type: object
+  models.Zone:
+    properties:
+      capacity:
+        title: capacity
+        type: integer
+      id:
+        title: id
+        type: integer
+      name:
+        title: name
+        type: string
+      numbered:
+        title: numbered
+        type: boolean
+      plan:
+        allOf:
+        - $ref: '#/definitions/models.Plan'
+        title: plan
+      planID:
+        type: integer
+      price:
+        title: price
+        type: number
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /v1/events/plans:
+    get:
+      consumes:
+      - application/json
+      description: get plans within a time range
+      parameters:
+      - description: Start time in format 2006-01-02T15:04:05
+        in: query
+        name: starts_at
+        required: true
+        type: string
+      - description: End time in format 2006-01-02T15:04:05
+        in: query
+        name: ends_at
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handlers.Plans'
+            type: array
+        "400":
+          description: Invalid parameters
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/echo.HTTPError'
+      summary: Events Plans
+      tags:
+      - Plans
 swagger: "2.0"

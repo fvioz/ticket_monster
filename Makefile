@@ -2,7 +2,7 @@ deps:
 	brew bundle
 
 build:
-	cd api && go get -u github.com/swaggo/swag/cmd/swag && go build -o bin/api main.go && $(HOME)/go/bin/swag init
+	cd api && go get -u github.com/swaggo/swag/cmd/swag && go build -o bin/api main.go && $(HOME)/go/bin/swag init --parseFuncBody --parseDependency
 	cd fetcher && go build -o bin/api main.go
 	cd processors && go build -o bin/api main.go
 

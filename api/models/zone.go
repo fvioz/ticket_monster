@@ -1,11 +1,11 @@
 package models
 
 type Zone struct {
-	ID       int64   `xml:"id"`
-	Capacity int64   `xml:"capacity"`
-	Price    float64 `xml:"price"`
-	Name     string  `xml:"name"`
-	Numbered bool    `xml:"numbered"`
+	ID       int64   `json:"id" title:"id" description:"Unique identifier for the zone"`
+	Capacity int64   `json:"capacity" title:"capacity" description:"Maximum capacity of the zone"`
+	Price    float64 `json:"price" title:"price" description:"Price of the zone in the plan, minimum:0, exclusiveMinimum:true"`
+	Name     string  `json:"name" title:"name" description:"Name of the zone, minLength:1"`
+	Numbered bool    `json:"numbered" title:"numbered" description:"Indicates if the zone is numbered" enum:"true,false"`
 	PlanID   int64
-	Plan     *Plan `pg:"rel:belongs-to"`
+	Plan     *Plan `pg:"rel:belongs-to" json:"plan" title:"plan" description:"Plan associated with this zone"`
 }

@@ -18,20 +18,21 @@ import (
 //	@version		1.0
 //	@description	Events API server.
 
-// @host		localhost:8080
+// @host		localhost:8080/swagger
 // @BasePath	/v1
 func (s *Server) routes() {
 	logger := libs.LoggerInstance()
 	planHandler := handlers.NewPlansHandler()
 
+	// Plans godoc
 	// @Summary Events Plans
 	// @Description get plans within a time range
 	// @Tags Plans
 	// @Accept json
-	// @Produce xml
+	// @Produce json
 	// @Param starts_at query string true "Start time in format 2006-01-02T15:04:05"
 	// @Param ends_at query string true "End time in format 2006-01-02T15:04:05"
-	// @Success 200 {array} handlers.Plan
+	// @Success 200 {array} handlers.Plans
 	// @Failure 400 {object} echo.HTTPError "Invalid parameters"
 	// @Failure 500 {object} echo.HTTPError "Internal server error"
 	// @Router /v1/events/plans [get]
@@ -55,7 +56,7 @@ func (s *Server) routes() {
 			return echo.NewHTTPError(http.StatusInternalServerError, "Internal server error")
 		}
 
-		return c.XMLPretty(http.StatusOK, &plans, "  ")
+		return c.JSON(http.StatusOK, plans)
 	})
 
 	s.echo.GET("/swagger/*", echoSwagger.WrapHandler)

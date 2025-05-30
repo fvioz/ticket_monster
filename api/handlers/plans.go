@@ -12,7 +12,11 @@ func NewPlansHandler() *PlanHandler {
 	return &PlanHandler{}
 }
 
-func (p *PlanHandler) GetPlansV1(starts_at time.Time, ends_at time.Time) ([]models.Plan, error) {
+type Plans struct {
+	Plans []models.Plan `json:"plans" title:"plans" description:"List of plans available for the specified period"`
+}
+
+func (p *PlanHandler) GetPlansV1(starts_at time.Time, ends_at time.Time) (Plans, error) {
 	db := libs.DBInstance()
 
 	var plans []models.Plan
@@ -28,5 +32,5 @@ func (p *PlanHandler) GetPlansV1(starts_at time.Time, ends_at time.Time) ([]mode
 		).
 		Select()
 
-	return plans, nil
+	return Plans{Plans: plans}, nil
 }
