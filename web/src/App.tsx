@@ -4,6 +4,7 @@ import { Header } from "@components/Header";
 import { Footer } from "@components/Footer";
 
 import { Home } from "@pages/home";
+import { Event } from "@pages/event";
 import { NotFound } from "@pages/notFound";
 
 export const App: React.FC = () => {
@@ -18,6 +19,7 @@ export const App: React.FC = () => {
 
   // Wrapping components with routeWrapper to maintain consistent layout
   const HomeWrapper = routeWrapper(Home);
+  const EventWrapper = routeWrapper(Event);
   const NotFoundWrapper = routeWrapper(NotFound);
 
   return (
@@ -25,6 +27,7 @@ export const App: React.FC = () => {
       <Header />
       <Routes>
         <Route path="/" element={<HomeWrapper />} />
+        <Route path="/event/:id" element={<EventWrapper />} />
         <Route path="*" element={<NotFoundWrapper />} />
       </Routes>
       <Footer />
