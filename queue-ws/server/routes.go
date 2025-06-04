@@ -19,4 +19,13 @@ func (s *Server) routes() {
 	})
 
 	s.echo.GET("/metrics", echoprometheus.NewHandler())
+
+	s.echo.GET("/:key", func(c echo.Context) error {
+		conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
+		if err != nil {
+			return err
+		}
+
+		return s.handlers.WebSocket(c.Param("key"), conn, s.storage)
+	})
 }
