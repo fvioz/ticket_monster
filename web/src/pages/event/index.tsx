@@ -29,7 +29,7 @@ export const Event: React.FC = () => {
   const plan = plans.find((plan) => String(plan.basePlan.id) === id);
 
   const { position: pos } = useWS({
-    wsPath: `/${plan ? plan.basePlan.id : ""}/ws`,
+    wsPath: `/${plan ? plan.basePlan.id : ""}`,
     interval: 10000,
     enabled: !loading && !error && plan?.basePlan.queueEnabled,
   });
