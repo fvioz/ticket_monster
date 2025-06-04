@@ -1,0 +1,12 @@
+FROM node:22-alpine
+
+RUN corepack enable
+
+VOLUME [ "/pnpm-store", "/app/node_modules" ]
+RUN pnpm config --global set store-dir /pnpm-store
+
+# You may need to copy more files than just package.json in your code
+COPY package.json /app/package.json
+
+WORKDIR /app
+RUN pnpm install

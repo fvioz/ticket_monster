@@ -58,6 +58,30 @@ services:
     networks:
       - back-end
 
+  # Web Service
+  web:
+    build:
+      context: web
+      dockerfile: ../Dockerfile.nodejs.dev
+    container_name: web
+    working_dir: /app
+    command: ["npm", "run", "dev"]
+    expose:
+      - 3000
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_DOMAIN=http://localhost:8080
+      - VITE_WS_DOMAIN=http://localhost:8081
+    depends_on:
+      - api
+    volumes:
+      - ./web:/app
+      - /pnpm-store
+      - /app/node_modules
+    networks:
+      - front-end
+
   # Database Service
   db:
     image: postgres:17-alpine
