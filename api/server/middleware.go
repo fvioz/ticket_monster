@@ -21,5 +21,6 @@ func (s *Server) middleware() {
 			return strings.Contains(c.Request().URL.Path, "swagger")
 		},
 	}))
-	s.echo.Use(echoprometheus.NewMiddleware("queue-ws"))
+	s.echo.Use(middleware.CORS())
+	s.echo.Use(echoprometheus.NewMiddleware("api"))
 }

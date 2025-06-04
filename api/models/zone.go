@@ -6,6 +6,6 @@ type Zone struct {
 	Price    float64 `json:"price" title:"price" description:"Price of the zone in the plan, minimum:0, exclusiveMinimum:true"`
 	Name     string  `json:"name" title:"name" description:"Name of the zone, minLength:1"`
 	Numbered bool    `json:"numbered" title:"numbered" description:"Indicates if the zone is numbered" enum:"true,false"`
-	PlanID   int64
-	Plan     *Plan `pg:"rel:belongs-to" json:"plan" title:"plan" description:"Plan associated with this zone"`
+	PlanID   int64   `json:"-"`
+	Plan     *Plan   `pg:"rel:belongs-to" json:"-" title:"plan" description:"Plan associated with this zone"`
 }
