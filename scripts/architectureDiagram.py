@@ -2,10 +2,11 @@
 
 from diagrams import Cluster, Diagram, Edge
 from diagrams.onprem.compute import Server
+from diagrams.onprem.client import Users
 from diagrams.onprem.database import PostgreSQL
 from diagrams.onprem.inmemory import Redis
 from diagrams.onprem.network import Nginx
-from diagrams.programming.language import Go
+from diagrams.programming.language import Go, NodeJS
 
 graph_attr = {"bgcolor": "white"}
 
@@ -16,50 +17,59 @@ with Diagram(
     graph_attr=graph_attr,
     direction="TB",
 ):
-    ingress = Nginx("ingress")
-    event_fetcher = Go("Event Fetcher")
+    users = Users("Users")
 
-    with Cluster("API Cluster"):
-        api = [
-            Server("API 1"),
-            Server("API 2"),
-            Server("API 3"),
-        ]
+    with Cluster("App"):
+        ingress = Nginx("ingress")
+        event_fetcher = Go("Event Fetcher")
 
-    with Cluster("Database HA"):
-        db_primary = PostgreSQL("Primary")
-        (
-            db_primary
-            - Edge(color="darkblue", style="dotted")
-            - [
-                PostgreSQL("Replica 1"),
-                PostgreSQL("Replica 2"),
-                PostgreSQL("Replica N"),
-            ]
-        )
+        with Cluster("Web Service Cluster"):
+            web = NodeJS("ws")
+            web - Edge(color="gray", style="dashed") - NodeJS("ws N")
 
-    with Cluster("Procesors Cluster"):
-        event_processor = [
-            Go("Event processor 1"),
-            Go("Event processor 2"),
-            Go("Event processor 3"),
-        ]
+        with Cluster("API Service Cluster"):
+            api = Go("api")
+            api - Edge(color="gray", style="dashed") - Go("api N")
 
-    with Cluster("Redis HA"):
-        redis_primary = Redis("Primary")
-        (
-            redis_primary
-            - Edge(color="red", style="dotted")
-            - [
-                Redis("Replica 1"),
-                Redis("Replica 2"),
-                Redis("Replica N"),
-            ]
-        )
+        with Cluster("Web Socket Service Cluster"):
+            web_socket = Go("ws")
+            web_socket - Edge(color="gray", style="dashed") - Go("ws N")
 
-    event_fetcher >> Edge(color="purple") << redis_primary
-    event_processor >> Edge(color="orange") >> db_primary
-    event_processor >> Edge(color="black") << redis_primary
+        with Cluster("Procesors Cluster"):
+            event_processor = Go("ep1")
+            event_processor - Edge(color="gray", style="dashed") - Go("ep N")
 
-    api << Edge(color="orange") << db_primary
-    ingress >> Edge(color="darkgreen") << api
+        with Cluster("Database HA"):
+            db_primary = PostgreSQL("storage")
+            db_primary - Edge(color="darkblue", style="dashed") - PostgreSQL("replica")
+
+            event_processor >> Edge(color="orange") >> db_primary
+            api << Edge(color="orange") << db_primary
+            web_socket >> Edge(color="orange") << db_primary
+
+        with Cluster("Tasks HA"):
+            redis_tasks_primary = Redis("tasks")
+            (
+                redis_tasks_primary
+                - Edge(color="darkred", style="dashed")
+                - Redis("replica")
+            )
+
+            event_fetcher >> Edge(color="purple") << redis_tasks_primary
+            event_processor >> Edge(color="black") << redis_tasks_primary
+
+        with Cluster("Web Socket HA"):
+            redis_ws_primary = Redis("web socket")
+            (
+                redis_ws_primary
+                - Edge(color="darkred", style="dashed")
+                - Redis("replica")
+            )
+
+            web_socket >> Edge(color="purple") << redis_ws_primary
+
+        ingress >> Edge(color="darkgreen") << web
+        ingress >> Edge(color="darkgreen") << api
+        ingress >> Edge(color="darkgreen") << web_socket
+
+        ingress >> Edge(color="black") << users

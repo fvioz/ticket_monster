@@ -43,6 +43,14 @@ Processes fetched events and stores them in the database.
 - PostgreSQL for persistent storage of plans
 - Redis for caching and job queuing
 
+5. **Web Layer Layer**
+Web client that inbteracts with the user and displays all the events available.
+
+This layer is also responsible for managing all web clients attempting to purchase event tickets when demand exceeds capacity. It efficiently administers the queue, ensuring fair and orderly access for all users.
+
+6. **Queue Layer**
+The WebSocket service handles all client connections in real time and manages the queue system, providing seamless updates and communication between the server and users.
+
 ### Component Workflows
 
 1. API Flow
@@ -95,6 +103,36 @@ sequenceDiagram
     DB-->Processor: Event saved
     Processor-->Redis: Finish the job
     Redis->>Processor: Job finished
+```
+
+4. Queue Flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+
+    User-->Web: Purchase tickets for this event
+    Web-->Queue: This event needs a queue.
+    Queue-->Web: No
+    Web-->User: Display event and ticket information
+```
+
+```mermaid
+sequenceDiagram
+    autonumber
+
+    User-->Web: Purchase tickets for this event
+    Web-->Queue: This event needs a queue.
+    Queue-->Web: Yes
+    Web-->User: Display the queue layout
+    User-->Web: Checking ..
+    Web-->Queue: I'm out of the queue
+    Queue-->Web: No
+    Web-->Queue: I'm out of the queue
+    Queue-->Web: No
+    Web-->Queue: I'm out of the queue
+    Queue-->Web: Yes - Until is out of the queue
+    Web-->User: Display event and ticket information
 ```
 
 ## Deployment
@@ -151,3 +189,8 @@ Event Processor
 
 - Worker Scaling: Adjust worker count based on queue size
 - Prioritization: Process high-value events first
+
+Queue System
+
+- Validates whether a new WebSocket connection can be established when a base plan exists.
+- Cleans up inactive or outdated WebSocket connections.
