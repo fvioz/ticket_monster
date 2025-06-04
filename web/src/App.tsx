@@ -5,6 +5,7 @@ import { Footer } from "@components/Footer";
 
 import { Home } from "@pages/home";
 import { Event } from "@pages/event";
+import { Checkout } from "@pages/checkout";
 import { NotFound } from "@pages/notFound";
 
 export const App: React.FC = () => {
@@ -20,6 +21,7 @@ export const App: React.FC = () => {
   // Wrapping components with routeWrapper to maintain consistent layout
   const HomeWrapper = routeWrapper(Home);
   const EventWrapper = routeWrapper(Event);
+  const CheckoutWrapper = routeWrapper(Checkout);
   const NotFoundWrapper = routeWrapper(NotFound);
 
   return (
@@ -28,6 +30,7 @@ export const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<HomeWrapper />} />
         <Route path="/event/:id" element={<EventWrapper />} />
+        <Route path="/event/:id/checkout" element={<CheckoutWrapper />} />
         <Route path="*" element={<NotFoundWrapper />} />
       </Routes>
       <Footer />
