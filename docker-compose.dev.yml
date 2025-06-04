@@ -22,6 +22,29 @@ services:
       - front-end
       - back-end
 
+  # Queue WebSocket Service
+  queue-ws:
+    build:
+      context: queue-ws
+      dockerfile: ../Dockerfile.go.dev
+    container_name: queue-ws
+    working_dir: /app
+    expose:
+      - 8081
+    ports:
+      - 8081:8080
+    command: ["go", "run", "main.go"]
+    environment:
+      - REDIS_HOST=redis
+      - HOST=0.0.0.0
+    depends_on:
+      - redis
+    volumes:
+      - ./queue-ws:/app
+    networks:
+      - front-end
+      - back-end
+
   # Fetcher service
   fetcher:
     build:
