@@ -3,13 +3,12 @@
 
 [README.md](/doc/README.md)
 
-## Fever code challenge
+## Extending the Challenge
 
-Welcome! We're thrilled to have you at this stage of the process. This challenge is designed to give us insight into your coding approach and problem-solving skills. It’s a simplified example of real-world scenarios we handle daily at Fever.
+- A web interface should display all available events.
+- If an event experiences high attendance, a queue system must be shown to manage participant flow.
 
-## About Fever
-
-At Fever we work to bring experiences to people. We have a marketplace of plans from different providers that are curated and then consumed by multiple applications. We work hard to expand the range of experiences we offer to our customers. Consequently, we are continuously looking for new providers with great plans to integrate in our platforms.
+Note: this new requirements were added to the proposal solution docummentation.
 
 ## The challenge
 
@@ -40,43 +39,3 @@ You need to **develop and expose a single endpoint**:
 - Plans should be included if they were ever available (with `"sell_mode": "online"`).
 - Past plans should be retrievable even if they are no longer present in the provider’s latest response.
 - The endpoint must be performant, responding in **hundreds of milliseconds**, regardless of the state of other external services. For instance, if the external provider service is down, our search endpoint should still work as usual. Similarly, it should also respond quickly to all requests regardless of the traffic we receive.
-
-## Evaluation criteria
-
-Your solution will be evaluated holistically, with special attention to:
-
-- **Problem-Solution Fit:** How well your solution aligns with the given problem.
-- **Adherence to API Spec:** Follow the provided OpenAPI specification.
-- **Documentation:** Provide a README explaining design choices and implementation details, additional design schemas will be valued.
-- **Makefile:** Include a Makefile with a run target to simplify running the application.
-- **Code Quality:** Readability, maintainability, and adherence to best practices.
-- **Software Architecture:** Structural design choices and scalability considerations.
-- **Efficiency:** Optimize for both resources and time efficiency.
-
-## Guidelines
-
-- Use your preferred programming language.
-- Feel free to use any libraries, frameworks, or tools that best fit the task.
-- Submit your code in the `master` branch of this repository.
-
-## Going the extra mile 🚀
-
-To make your solution even stronger, consider:
-
-- **Scalability:** How would you handle a scenario where the provider sends thousands of plans with hundreds of zones per plan?
-- **High Traffic:** How would your service respond to 5k-10k requests per second?
-- **Optimization Strategies:** How can the system remain performant under heavy load?
-
-You can implement these enhancements in your code or describe your approach in the README.
-
-## Need Help?
-
-If you have any questions, feel free to reach out. We’ll get back to you as soon as possible.
-
-## Feedback
-
-We value your time and effort! Please take a moment to share your thoughts on our process:
-
-[📋 Feedback Form](https://forms.gle/6NdDApby6p3hHsWp8)
-
-Thank you for participating, and good luck! 🎉
