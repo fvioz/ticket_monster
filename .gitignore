@@ -27,6 +27,13 @@ go.work
 
 go.sum
 
+### Node.js ###
+# Node.js specific files
+
+*node_modules/
+*dist/
+*.tsbuildinfo
+
 ### Macos ###
 # macOS operating system specific files
 
